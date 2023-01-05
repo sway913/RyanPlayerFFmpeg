@@ -82,7 +82,7 @@ protected:
 	AVFormatContext *pFormatCtx;
     int openInput();
     bool hasAllCodecParameters();
-    virtual int openFormatInput(char *videoSourceURI); // 打开文件
+    virtual int openFormatInput(const char *videoSourceURI); // 打开文件
 	virtual void initFFMpegContext();
 	virtual bool isNeedRetry();
 	virtual int initAnalyzeDurationAndProbesize(int* max_analyze_durations, int analyzeDurationSize, int probesize, bool fpsProbeSizeConfigured);

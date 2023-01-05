@@ -119,8 +119,11 @@ void VideoDecoder::startUploader(UploaderCallback * pUploaderCallback) {
 	pthread_mutex_unlock(&mLock);
 }
 
-int VideoDecoder::openFormatInput(char *videoSourceURI) {
+int VideoDecoder::openFormatInput(const char *videoSourceURI) {
 	//打开一个文件 只是读文件头，并不会填充流信息 需要注意的是，此处的pFormatContext必须为NULL或由avformat_alloc_context分配得到
+	LOGE("open input videoSourceURI:%s", videoSourceURI);
+//	std::string ppp = "/sdcard/DCIM/Camera/SyncTest20fps.mp4";
+    std::string ppp = "/sdcard/SyncTest20fps.mp4";
 	return avformat_open_input(&pFormatCtx, videoSourceURI, NULL, NULL);
 }
 
@@ -212,7 +215,8 @@ bool VideoDecoder::isNeedRetry(){
 
 int VideoDecoder::openInput() {
 //	LOGI("VideoDecoder::openInput");
-	char *videoSourceURI = requestHeader->getURI();
+//	char *videoSourceURI = requestHeader->getURI();
+    const char *videoSourceURI = "/sdcard/SyncTest20fps.mp4";
 	int* max_analyze_durations = requestHeader->getMaxAnalyzeDurations();
 	int analyzeDurationSize = requestHeader->getAnalyzeCnt();
 
@@ -235,7 +239,7 @@ int VideoDecoder::openInput() {
 	//打开一个文件 只是读文件头，并不会填充流信息 需要注意的是，此处的pFormatContext必须为NULL或由avformat_alloc_context分配得到
 	int openInputErrCode = 0;
 	if ((openInputErrCode = this->openFormatInput(videoSourceURI)) != 0) {
-		LOGI("Video decoder open input file failed... videoSourceURI is %s openInputErr is %s", videoSourceURI, av_err2str(openInputErrCode));
+		LOGE("Video decoder open input file failed... videoSourceURI is %s openInputErr is %s", videoSourceURI, av_err2str(openInputErrCode));
 		return -1;
 	}
 	this->initAnalyzeDurationAndProbesize(max_analyze_durations, analyzeDurationSize, probesize, fpsProbeSizeConfigured);
